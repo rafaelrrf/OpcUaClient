@@ -31,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -54,16 +55,16 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Opc.Ua.Client\Opc.Ua.Client.csproj">
-      <Project>{95bd2b31-a10c-41ee-a399-4b5a82533ea9}</Project>
+    <ProjectReference Include="..\..\UA-.NETStandard\SampleApplications\SDK\Opc.Ua.Client\Opc.Ua.Client.csproj">
+      <Project>{3aca7caf-bf23-447e-8ee5-cd6505f94797}</Project>
       <Name>Opc.Ua.Client</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Opc.Ua.Configuration\Opc.Ua.Configuration.csproj">
-      <Project>{5d3da77a-7063-4177-9482-1b1d1fbf2a39}</Project>
+    <ProjectReference Include="..\..\UA-.NETStandard\SampleApplications\SDK\Opc.Ua.Configuration\Opc.Ua.Configuration.csproj">
+      <Project>{fcb98c59-2ac7-4c0e-87fb-9ad13eddec00}</Project>
       <Name>Opc.Ua.Configuration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Opc.Ua.Core\Opc.Ua.Core.csproj">
-      <Project>{5d0f1616-26e0-4210-8f46-ca97430192fc}</Project>
+    <ProjectReference Include="..\..\UA-.NETStandard\Stack\Opc.Ua.Core\Opc.Ua.Core.csproj">
+      <Project>{f18437f4-8917-4307-b04f-a9a0571bd10f}</Project>
       <Name>Opc.Ua.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpcUaClient.Model\OpcUaClient.Model.csproj">

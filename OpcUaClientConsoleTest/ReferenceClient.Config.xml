@@ -39,7 +39,9 @@
     <!-- WARNING: The following setting (to automatically accept untrusted certificates) should be used
     for easy debugging purposes ONLY and turned off for production deployments! -->
     <AutoAcceptUntrustedCertificates>true</AutoAcceptUntrustedCertificates>
-  
+    <RejectSHA1SignedCertificates>false</RejectSHA1SignedCertificates>
+    
+
   </SecurityConfiguration>
   
   <TransportConfigurations></TransportConfigurations>
