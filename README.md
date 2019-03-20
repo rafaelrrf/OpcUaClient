@@ -3,6 +3,7 @@ This library was created to encapsulate the methods that I use in projetcs.
 
 reference:
 https://github.com/OPCFoundation/UA-.NETStandard 
+https://github.com/rafaelrrf/UA-.NETStandard (need to clone this too in order to work properly)
 
 methods:
 - Connect
