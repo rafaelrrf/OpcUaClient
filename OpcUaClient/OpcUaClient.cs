@@ -14,8 +14,9 @@ namespace OpcUaClient
     /// <summary>
     /// Class that implements the basic OPC UA Client calls : Connect, Disconnect, ReadValues, WriteValues.
     /// </summary>
-    public class OpcUaClient
+    public class OpcUaClient : IDisposable
     {
+        #region constructor
         /// <summary>
         /// Main constructor
         /// </summary>
@@ -37,6 +38,8 @@ namespace OpcUaClient
             //event handler to validate the server certificate
             m_CertificateValidation = new CertificateValidationEventHandler(Notification_ServerCertificate);
         }
+
+        #endregion
 
         #region Private Fields        
         private int m_Timeout = 5000;
@@ -177,17 +180,24 @@ namespace OpcUaClient
             {
                 if (session != null)
                 {
-                    session.Close(m_Timeout);
-
-                    if (!session.Disposed)
-                    {
-                        session.Dispose();
-                    }
+                    session.Close(m_Timeout);                 
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Exception OpcUaClient::Disconnect " + ex.Message);
+                System.Diagnostics.Debug.WriteLine("Exception OpcUaClient::Disconnect.Close " + ex.Message);
+            }
+
+            try
+            {
+                if (!session.Disposed)
+                {
+                    session.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception OpcUaClient::Disconnect.Dispose " + ex.Message);
             }
         }
 
@@ -433,6 +443,17 @@ namespace OpcUaClient
             return endpoints;
         }
 
+        #region IDisposable
+
+        public void Dispose()
+        {
+            Disconnect();
+        }
+
         #endregion
+
+        #endregion
+
+
     }
 }
