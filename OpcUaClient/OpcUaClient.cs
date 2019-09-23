@@ -45,6 +45,8 @@ namespace OpcUaClient
         private int m_Timeout = 5000;
         private Opc.Ua.ApplicationConfiguration m_configuration;
         private CertificateValidationEventHandler m_CertificateValidation;
+        SessionReconnectHandler reconnectHandler;
+        const int ReconnectPeriod = 10;
         #endregion
 
         #region Public Members               
@@ -151,7 +153,7 @@ namespace OpcUaClient
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine(String.Format("Exception OpcUaClient::Connect: " + ex.ToString()));
+                System.Diagnostics.Trace.WriteLine(String.Format("Exception OpcUaClient::Connect: " + ex.ToString()));
             }
         }
 
@@ -159,23 +161,52 @@ namespace OpcUaClient
         {
             if (e.Status != null && ServiceResult.IsNotGood(e.Status))
             {
-                Console.WriteLine("{0} {1}/{2}", e.Status, session.OutstandingRequestCount, session.DefunctRequestCount);
+                Console.WriteLine("Session_KeepAlive {0} {1}/{2}", e.Status, session.OutstandingRequestCount, session.DefunctRequestCount);
                 System.Diagnostics.Debug.WriteLine("Session_KeepAlive {0} {1}/{2}", e.Status, session.OutstandingRequestCount, session.DefunctRequestCount);
-
-                /*
+                
                 if (reconnectHandler == null)
                 {
                     Console.WriteLine("--- RECONNECTING ---");
+                    System.Diagnostics.Debug.WriteLine("--- RECONNECTING ---");
                     reconnectHandler = new SessionReconnectHandler();
-                    reconnectHandler.BeginReconnect(sender, ReconnectPeriod * 1000, Client_ReconnectComplete);
+                    reconnectHandler.BeginReconnect(session, ReconnectPeriod * 1000, Client_ReconnectComplete);
                 }
-                */
+                
             }            
+        }
+
+
+        private void Client_ReconnectComplete(object sender, EventArgs e)
+        {
+            // ignore callbacks from discarded objects.
+            if (!Object.ReferenceEquals(sender, reconnectHandler))
+            {
+                return;
+            }
+
+            session = reconnectHandler.Session;
+            reconnectHandler.Dispose();
+            reconnectHandler = null;
+
+            Console.WriteLine("--- RECONNECTED ---");
         }
 
         /// <summary>Closes an existing session and disconnects from the server.</summary>        
         public void Disconnect()
         {
+            try
+            {
+                if (session != null)
+                {
+                    session.CloseSession(new RequestHeader(), true);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception OpcUaClient::Disconnect.CloseSession " + ex.Message);
+            }
+
+
             try
             {
                 if (session != null)
@@ -187,6 +218,8 @@ namespace OpcUaClient
             {
                 System.Diagnostics.Debug.WriteLine("Exception OpcUaClient::Disconnect.Close " + ex.Message);
             }
+
+            
 
             try
             {

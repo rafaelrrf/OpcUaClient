@@ -12,7 +12,7 @@ namespace OpcUaClientConsoleTest
         static void Main(string[] args)
         {
             
-            string url = "opc.tcp://10.8.66.77:4840";
+            string url = "opc.tcp://10.8.66.112:4840";
 
 
             string nodeMaxPos = "ns=3;s=\"DB_INTF_EXT\".\"MAX_POS\"";
@@ -51,6 +51,8 @@ namespace OpcUaClientConsoleTest
             List<bool> writeStatus;
 
             bool returnOk = opcUaClient.WriteValues(opcNodes, objectValues, out writeStatus);
+
+            opcUaClient.Disconnect();
 
             Console.Read();            
         }
